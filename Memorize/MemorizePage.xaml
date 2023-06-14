@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Memorize.MemorizePage"
+             xmlns:model="clr-namespace:Memorize.Model"
+             xmlns:viewmodel="clr-namespace:Memorize.ViewModel"
+             xmlns:templateselector="clr-namespace:Memorize.TemplateSelector"
+             x:DataType="viewmodel:MemorizeViewModel"
+             Title="Memorize">
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <FlexLayout Wrap="Wrap" JustifyContent="Center" AlignContent="Start" BindableLayout.ItemsSource="{Binding Game.Cards}">
+                <BindableLayout.ItemTemplateSelector>
+                    <templateselector:CardDataTemplateSelector>
+                        <templateselector:CardDataTemplateSelector.MatchedCardTemplate>
+                            <DataTemplate x:DataType="{x:Type model:Card}">
+                                <Grid Margin="5, 10" HeightRequest="200" WidthRequest="150">
+                                    <Frame BackgroundColor="{StaticResource Secondary}" Opacity="0.5">
+                                        <Label Text="{Binding Content}" FontSize="24" TextColor="{StaticResource Tertiary}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </templateselector:CardDataTemplateSelector.MatchedCardTemplate>
+                        <templateselector:CardDataTemplateSelector.FaceUpCardTemplate>
+                            <DataTemplate x:DataType="{x:Type model:Card}">
+                                <Grid Margin="5, 10" HeightRequest="200" WidthRequest="150">
+                                    <Frame BackgroundColor="{StaticResource Secondary}">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MemorizeViewModel}}, Path=ChooseCardCommand}" CommandParameter="{Binding .}" />
+                                        </Frame.GestureRecognizers>
+                                        <Label Text="{Binding Content}" FontSize="24" TextColor="{StaticResource Tertiary}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </templateselector:CardDataTemplateSelector.FaceUpCardTemplate>
+                        <templateselector:CardDataTemplateSelector.FaceDownCardTemplate>
+                            <DataTemplate x:DataType="{x:Type model:Card}">
+                                <Grid Margin="5, 10" HeightRequest="200" WidthRequest="150">
+                                    <Frame BackgroundColor="{StaticResource Tertiary}">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MemorizeViewModel}}, Path=ChooseCardCommand}" CommandParameter="{Binding .}" />
+                                        </Frame.GestureRecognizers>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </templateselector:CardDataTemplateSelector.FaceDownCardTemplate>
+                    </templateselector:CardDataTemplateSelector>
+                </BindableLayout.ItemTemplateSelector>
+            </FlexLayout>
+            <Label Text="{Binding GameOverText}"/>
+            <Button Text="New Game" Command="{Binding NewGameCommand}"></Button>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
